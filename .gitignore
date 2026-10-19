@@ -1,0 +1,5 @@
+0*-*.md
+__pycache__/
+*.py[cod]
+.idea/
+.vscode/
