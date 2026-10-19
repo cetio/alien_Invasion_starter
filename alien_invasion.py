@@ -4,6 +4,7 @@ import sys
 
 import pygame
 
+from alien_ship import Ship
 from settings import Settings
 
 
@@ -25,6 +26,8 @@ class AlienInvasion:
         self.bg = pygame.transform.scale(
             self.bg, (self.settings.screen_w, self.settings.screen_h))
 
+        self.ship = Ship(self)
+
         self.running = True
 
     def run_game(self) -> None:
@@ -37,6 +40,7 @@ class AlienInvasion:
                     sys.exit()
 
             self.screen.blit(self.bg, (0, 0))
+            self.ship.draw()
             pygame.display.flip()
             # TODO: This seems like a horrible idea. Time delta is superior, as FPS can be tricked.
             self.clock.tick(self.settings.fps)
