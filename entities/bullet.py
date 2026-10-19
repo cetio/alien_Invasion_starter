@@ -7,7 +7,7 @@ from pygame.sprite import Sprite
 from entity import Entity
 
 if TYPE_CHECKING:
-    from game import AlienInvasion
+    from alien_invasion import AlienInvasion
 
 
 class Bullet(Sprite, Entity):

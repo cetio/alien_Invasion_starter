@@ -6,7 +6,7 @@ import pygame
 from entities.bullet import Bullet
 
 if TYPE_CHECKING:
-    from game import AlienInvasion
+    from alien_invasion import AlienInvasion
 
 
 class ShipArsenal:

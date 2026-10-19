@@ -4,7 +4,7 @@ from typing import TYPE_CHECKING
 import pygame
 
 if TYPE_CHECKING:
-    from game import AlienInvasion
+    from alien_invasion import AlienInvasion
 
 
 class Ship:
