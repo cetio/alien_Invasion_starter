@@ -22,3 +22,10 @@ class Settings:
         self.ship_w = 40
         self.ship_h = 60
         self.ship_speed = 5
+
+        self.bullet_file = self.images_dir / "laserBlast.png"
+        self.laser_sound = self.sound_dir / "laser.mp3"
+        self.bullet_w = 25
+        self.bullet_h = 80
+        self.bullet_speed = 7
+        self.bullet_amount = 5
