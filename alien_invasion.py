@@ -34,13 +34,23 @@ class AlienInvasion:
     def run_game(self) -> None:
         """Start the main loop for the game."""
         while self.running:
-            self._check_events()
+            self._check_input()
             self.ship.update()
             self._update_screen()
             # TODO: This seems like a horrible idea. Time delta is superior, as FPS can be tricked.
             self.clock.tick(self.settings.fps)
 
-    def _check_events(self) -> None:
+    def _update_screen(self) -> None:
+        """Draw the background and entities in layer order, then flip."""
+        # Background is always layer 0 and other entities can't be below or equal to it.
+        self.screen.blit(self.bg, (0, 0))
+
+        for entity in sorted(self.entities, key=lambda entity: entity.layer):
+            entity.draw()
+
+        pygame.display.flip()
+
+    def _check_input(self) -> None:
         """Respond to keypresses and window events."""
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -69,16 +79,6 @@ class AlienInvasion:
             self.ship.moving_right = False
         elif event.key == pygame.K_LEFT:
             self.ship.moving_left = False
-
-    def _update_screen(self) -> None:
-        """Draw the background and entities in layer order, then flip."""
-        # Background is always layer 0 and other entities can't be below or equal to it.
-        self.screen.blit(self.bg, (0, 0))
-
-        for entity in sorted(self.entities, key=lambda entity: entity.layer):
-            entity.draw()
-
-        pygame.display.flip()
 
 
 if __name__ == '__main__':
