@@ -4,7 +4,7 @@ import sys
 
 import pygame
 
-from alien_ship import Ship
+from entities.ship import Ship
 from settings import Settings
 
 
