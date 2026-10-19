@@ -5,16 +5,18 @@ import pygame
 
 if TYPE_CHECKING:
     from alien_invasion import AlienInvasion
+    from entities.arsenal import ShipArsenal
 
 
 class Ship:
     """The player ship entity class."""
 
-    def __init__(self, game: "AlienInvasion") -> None:
+    def __init__(self, game: "AlienInvasion", arsenal: "ShipArsenal") -> None:
         """Initialize the ship and set its starting position."""
         self.game = game
         self.settings = game.settings
         self.screen = game.screen
+        self.arsenal = arsenal
         self.layer = 1
         self.priority = 1
 
@@ -31,6 +33,11 @@ class Ship:
         self.x = float(self.rect.x)
 
     def update(self) -> None:
+        """Update the ship's position and its arsenal."""
+        self._update_ship_movement()
+        self.arsenal.update_arsenal()
+
+    def _update_ship_movement(self) -> None:
         """Update the ship's position based on the movement flags."""
         if self.moving_right and self.rect.right < self.boundaries.right:
             self.x += self.settings.ship_speed
@@ -38,6 +45,11 @@ class Ship:
             self.x -= self.settings.ship_speed
         self.rect.x = self.x
 
+    def fire(self) -> bool:
+        """Fire a bullet through the arsenal."""
+        return self.arsenal.fire_bullet()
+
     def draw(self) -> None:
-        """Draw the ship at its current position."""
+        """Draw the ship and its arsenal."""
+        self.arsenal.draw()
         self.screen.blit(self.image, self.rect)
