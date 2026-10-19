@@ -18,3 +18,6 @@ class Settings:
         self.file_dir = Path.cwd() / "Assets" / "file"
 
         self.bg_file = self.images_dir / "Starbasesnow.png"
+        self.ship_file = self.images_dir / "ship2(no bg).png"
+        self.ship_w = 40
+        self.ship_h = 60
