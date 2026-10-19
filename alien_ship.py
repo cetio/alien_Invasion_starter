@@ -22,8 +22,20 @@ class Ship:
             self.image, (self.settings.ship_w, self.settings.ship_h))
 
         self.rect = self.image.get_rect()
-        self.screen_rect = game.screen.get_rect()
-        self.rect.midbottom = self.screen_rect.midbottom
+        self.boundaries = game.screen.get_rect()
+        self.rect.midbottom = self.boundaries.midbottom
+
+        self.moving_right = False
+        self.moving_left = False
+        self.x = float(self.rect.x)
+
+    def update(self) -> None:
+        """Update the ship's position based on the movement flags."""
+        if self.moving_right and self.rect.right < self.boundaries.right:
+            self.x += self.settings.ship_speed
+        if self.moving_left and self.rect.left > self.boundaries.left:
+            self.x -= self.settings.ship_speed
+        self.rect.x = self.x
 
     def draw(self) -> None:
         """Draw the ship at its current position."""

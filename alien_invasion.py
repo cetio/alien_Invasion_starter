@@ -35,6 +35,7 @@ class AlienInvasion:
         """Start the main loop for the game."""
         while self.running:
             self._check_events()
+            self.ship.update()
             self._update_screen()
             # TODO: This seems like a horrible idea. Time delta is superior, as FPS can be tricked.
             self.clock.tick(self.settings.fps)
