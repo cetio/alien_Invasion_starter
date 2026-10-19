@@ -27,8 +27,17 @@ class AlienInvasion:
             self.bg, (self.settings.screen_w, self.settings.screen_h))
 
         self.ship = Ship(self)
+        self.entities = [self.ship]
 
         self.running = True
+
+    def draw(self) -> None:
+        """Draw the background, then each entity in layer order."""
+        # Background is always layer 0 and other entities can't be below or equal to it.
+        self.screen.blit(self.bg, (0, 0))
+        
+        for entity in sorted(self.entities, key=lambda entity: entity.layer):
+            entity.draw()
 
     def run_game(self) -> None:
         """Start the main loop for the game."""
@@ -39,8 +48,7 @@ class AlienInvasion:
                     pygame.quit()
                     sys.exit()
 
-            self.screen.blit(self.bg, (0, 0))
-            self.ship.draw()
+            self.draw()
             pygame.display.flip()
             # TODO: This seems like a horrible idea. Time delta is superior, as FPS can be tricked.
             self.clock.tick(self.settings.fps)
