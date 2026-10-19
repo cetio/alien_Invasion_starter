@@ -38,6 +38,7 @@ class AlienInvasion:
 
             self.screen.blit(self.bg, (0, 0))
             pygame.display.flip()
+            # TODO: This seems like a horrible idea. Time delta is superior, as FPS can be tricked.
             self.clock.tick(self.settings.fps)
 
 
