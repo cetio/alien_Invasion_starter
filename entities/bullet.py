@@ -20,7 +20,6 @@ class Bullet(Sprite, Entity):
         self.game = game
         self.settings = game.settings
         self.screen = game.screen
-        # TODO: We might want to support layer 0 (or possibly negative layers?) so the ship doesn't clip it.
         self.layer = 2
         self.priority = 2
 
