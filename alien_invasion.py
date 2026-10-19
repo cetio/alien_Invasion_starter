@@ -35,10 +35,15 @@ class AlienInvasion:
         """Start the main loop for the game."""
         while self.running:
             self._check_input()
-            self.ship.update()
+            self._update_entities()
             self._update_screen()
             # TODO: This seems like a horrible idea. Time delta is superior, as FPS can be tricked.
             self.clock.tick(self.settings.fps)
+
+    def _update_entities(self) -> None:
+        """Update each entity in priority order."""
+        for entity in sorted(self.entities, key=lambda entity: entity.priority):
+            entity.update()
 
     def _update_screen(self) -> None:
         """Draw the background and entities in layer order, then flip."""

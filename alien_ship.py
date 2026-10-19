@@ -16,6 +16,7 @@ class Ship:
         self.settings = game.settings
         self.screen = game.screen
         self.layer = 1
+        self.priority = 1
 
         self.image = pygame.image.load(self.settings.ship_file)
         self.image = pygame.transform.scale(
