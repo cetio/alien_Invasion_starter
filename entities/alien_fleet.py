@@ -77,8 +77,28 @@ class AlienFleet(Entity):
         self.fleet.add(Alien(self, current_x, current_y))
 
     def update(self) -> None:
-        """Keep the fleet stationary while laying out the rows."""
-        pass
+        """Handle screen edges, then move all aliens together."""
+        self._check_fleet_edges()
+        self.fleet.update()
+
+    def _check_fleet_edges(self) -> None:
+        """Drop and reverse the fleet when any alien reaches an edge."""
+        alien: Alien
+        for alien in self.fleet:
+            if alien.check_edges():
+                self._drop_fleet()
+                self._change_fleet_direction()
+                break
+
+    def _drop_fleet(self) -> None:
+        """Move every alien down by the fleet's drop speed."""
+        alien: Alien
+        for alien in self.fleet:
+            alien.y += self.drop_speed
+
+    def _change_fleet_direction(self) -> None:
+        """Reverse the fleet's horizontal direction."""
+        self.fleet_direction *= -1
 
     def draw(self) -> None:
         """Draw each alien in the fleet."""

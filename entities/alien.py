@@ -37,11 +37,8 @@ class Alien(Sprite, Entity):
         self.y = float(self.rect.y)
 
     def update(self) -> None:
-        """Move the alien sideways, reversing and dropping at an edge."""
-        if self.check_edges():
-            self.settings.fleet_direction *= -1
-            self.y += self.settings.fleet_drop_speed
-        self.x += self.settings.fleet_speed * self.settings.fleet_direction
+        """Move the alien in the fleet's current direction."""
+        self.x += self.settings.fleet_speed * self.fleet.fleet_direction
         self.rect.x = self.x
         self.rect.y = self.y
 
