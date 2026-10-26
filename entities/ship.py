@@ -5,7 +5,7 @@ import pygame
 
 if TYPE_CHECKING:
     from alien_invasion import AlienInvasion
-    from entities.arsenal import ShipArsenal
+    from entities.ship_arsenal import ShipArsenal
 
 
 class Ship:

@@ -5,7 +5,7 @@ import sys
 import pygame
 
 from entities.alien import Alien
-from entities.arsenal import ShipArsenal
+from entities.ship_arsenal import ShipArsenal
 from entities.ship import Ship
 from settings import Settings
 
