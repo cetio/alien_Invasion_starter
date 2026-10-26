@@ -7,22 +7,23 @@ from pygame.sprite import Sprite
 from entity import Entity
 
 if TYPE_CHECKING:
-    from alien_invasion import AlienInvasion
+    from entities.alien_fleet import AlienFleet
 
 
 class Alien(Sprite, Entity):
     """Alien enemy entity class."""
 
-    def __init__(self, game: "AlienInvasion", x, y) -> None:
+    def __init__(self, fleet: "AlienFleet", x, y) -> None:
         """Create an alien at the given position."""
         super().__init__()
 
-        self.game = game
-        self.settings = game.settings
-        self.screen = game.screen
+        self.fleet = fleet
+        self.game = fleet.game
+        self.settings = self.game.settings
+        self.screen = self.game.screen
         self.layer = 3
         self.priority = 3
-        self.boundaries = game.screen.get_rect()
+        self.boundaries = self.game.screen.get_rect()
 
         self.image = pygame.image.load(self.settings.alien_file)
         self.image = pygame.transform.scale(
