@@ -100,6 +100,22 @@ class AlienFleet(Entity):
         """Reverse the fleet's horizontal direction."""
         self.fleet_direction *= -1
 
+    def check_collisions(self, other_group) -> dict:
+        """Remove colliding aliens and projectiles, returning the hits."""
+        return pygame.sprite.groupcollide(self.fleet, other_group, True, True)
+
+    def check_fleet_bottom(self) -> bool:
+        """Return whether any alien has reached the bottom of the screen."""
+        alien: Alien
+        for alien in self.fleet:
+            if alien.rect.bottom >= self.settings.screen_h:
+                return True
+        return False
+
+    def check_destroyed_status(self) -> bool:
+        """Return whether no aliens remain in the fleet."""
+        return not self.fleet
+
     def draw(self) -> None:
         """Draw each alien in the fleet."""
         alien: Alien

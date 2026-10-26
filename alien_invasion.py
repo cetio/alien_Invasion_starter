@@ -46,6 +46,7 @@ class AlienInvasion:
         while self.running:
             self._check_input()
             self._update_entities()
+            self._check_collisions()
             self._update_screen()
             # TODO: This seems like a horrible idea. Time delta is superior, as FPS can be tricked.
             self.clock.tick(self.settings.fps)
@@ -54,6 +55,21 @@ class AlienInvasion:
         """Update each entity in priority order."""
         for entity in sorted(self.entities, key=lambda entity: entity.priority):
             entity.update()
+
+    def _check_collisions(self) -> None:
+        """Check ship, bottom-edge, and projectile collisions."""
+        if self.ship.check_collisions(self.alien_fleet.fleet):
+            # TODO: Check lives and reset the level after a ship hit.
+            pass
+        if self.alien_fleet.check_fleet_bottom():
+            # TODO: Check lives and reset the level at the bottom edge.
+            pass
+        collisions = self.alien_fleet.check_collisions(self.ship.arsenal.arsenal)
+        if collisions:
+            # TODO: Play the impact sound.
+            if self.alien_fleet.check_destroyed_status():
+                # TODO: Reset the level when the fleet is destroyed.
+                pass
 
     def _update_screen(self) -> None:
         """Draw the background and entities in layer order, then flip."""
