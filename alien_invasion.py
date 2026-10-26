@@ -4,7 +4,7 @@ import sys
 
 import pygame
 
-from entities.alien import Alien
+from entities.alien_fleet import AlienFleet
 from entities.ship_arsenal import ShipArsenal
 from entities.ship import Ship
 from settings import Settings
@@ -31,8 +31,9 @@ class AlienInvasion:
         self.arsenal = ShipArsenal(self)
         self.ship = Ship(self, self.arsenal)
         self.entities = [self.ship]
-        self.alien = Alien(self, 10, 10)
-        self.entities.append(self.alien)
+        self.alien_fleet = AlienFleet(self)
+        self.alien_fleet.create_fleet()
+        self.entities.append(self.alien_fleet)
 
         pygame.mixer.init()
         self.laser_sound = pygame.mixer.Sound(self.settings.laser_sound)
