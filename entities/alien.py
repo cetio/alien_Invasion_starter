@@ -36,8 +36,18 @@ class Alien(Sprite, Entity):
         self.y = float(self.rect.y)
 
     def update(self) -> None:
-        """Keep the alien stationary."""
-        pass
+        """Move the alien sideways, reversing and dropping at an edge."""
+        if self.check_edges():
+            self.settings.fleet_direction *= -1
+            self.y += self.settings.fleet_drop_speed
+        self.x += self.settings.fleet_speed * self.settings.fleet_direction
+        self.rect.x = self.x
+        self.rect.y = self.y
+
+    def check_edges(self) -> bool:
+        """Return whether the alien has reached either screen edge."""
+        return (self.rect.right >= self.boundaries.right
+                or self.rect.left <= self.boundaries.left)
 
     def draw(self) -> None:
         """Draw the alien at its current position."""

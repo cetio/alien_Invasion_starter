@@ -33,4 +33,6 @@ class Settings:
         self.alien_file = self.images_dir / "enemy_4.png"
         self.alien_w = 40
         self.alien_h = 40
-        self.fleet_speed = 5
+        self.fleet_speed = 2
+        self.fleet_direction = 1
+        self.fleet_drop_speed = 10
