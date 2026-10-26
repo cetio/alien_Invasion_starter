@@ -31,6 +31,7 @@ class Settings:
         self.bullet_amount = 5
 
         self.alien_file = self.images_dir / "enemy_4.png"
+        self.impact_sound = self.sound_dir / "impactSound.mp3"
         self.alien_w = 40
         self.alien_h = 40
         self.fleet_speed = 2
