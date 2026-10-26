@@ -1,12 +1,14 @@
 #!/usr/bin/env python3.12
 """Alien Invasion — main game module."""
 import sys
+from time import sleep
 
 import pygame
 
 from entities.alien_fleet import AlienFleet
 from entities.ship_arsenal import ShipArsenal
 from entities.ship import Ship
+from game_stats import GameStats
 from settings import Settings
 
 
@@ -19,6 +21,7 @@ class AlienInvasion:
 
         self.clock = pygame.time.Clock()
         self.settings = Settings()
+        self.game_stats = GameStats(self.settings.starting_ship_count)
 
         self.screen = pygame.display.set_mode(
             (self.settings.screen_w, self.settings.screen_h))
@@ -42,13 +45,15 @@ class AlienInvasion:
         self.impact_sound.set_volume(0.7)
 
         self.running = True
+        self.active = True
 
     def run_game(self) -> None:
         """Start the main loop for the game."""
         while self.running:
             self._check_input()
-            self._update_entities()
-            self._check_collisions()
+            if self.active:
+                self._update_entities()
+                self._check_collisions()
             self._update_screen()
             # TODO: This seems like a horrible idea. Time delta is superior, as FPS can be tricked.
             self.clock.tick(self.settings.fps)
@@ -61,17 +66,33 @@ class AlienInvasion:
     def _check_collisions(self) -> None:
         """Check ship, bottom-edge, and projectile collisions."""
         if self.ship.check_collisions(self.alien_fleet.fleet):
-            # TODO: Check lives and reset the level after a ship hit.
-            pass
+            self._check_game_status()
+            return
         if self.alien_fleet.check_fleet_bottom():
-            # TODO: Check lives and reset the level at the bottom edge.
-            pass
+            self._check_game_status()
+            return
         collisions = self.alien_fleet.check_collisions(self.ship.arsenal.arsenal)
         if collisions:
             self.impact_sound.play(fade_ms=250)
             if self.alien_fleet.check_destroyed_status():
-                # TODO: Reset the level when the fleet is destroyed.
-                pass
+                self._reset_level()
+
+    def _reset_level(self) -> None:
+        """Clear projectiles, rebuild the fleet, and re-center the ship."""
+        self.ship.arsenal.arsenal.empty()
+        self.alien_fleet.fleet.empty()
+        self.alien_fleet.create_fleet()
+        self.ship._center_ship()
+        sleep(0.5)
+
+    def _check_game_status(self) -> None:
+        """Spend a ship and stop gameplay when none remain."""
+        if self.game_stats.ships_left > 0:
+            self.game_stats.ships_left -= 1
+        if self.game_stats.ships_left > 0:
+            self._reset_level()
+        else:
+            self.active = False
 
     def _update_screen(self) -> None:
         """Draw the background and entities in layer order, then flip."""
@@ -102,7 +123,7 @@ class AlienInvasion:
         elif event.key == pygame.K_LEFT:
             self.ship.moving_left = True
         elif event.key == pygame.K_SPACE:
-            if self.ship.fire():
+            if self.active and self.ship.fire():
                 self.laser_sound.play(fade_ms=250)
         elif event.key == pygame.K_q:
             self.running = False
