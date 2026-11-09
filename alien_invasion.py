@@ -10,6 +10,7 @@ from entities.alien_fleet import AlienFleet
 from entities.ship_arsenal import ShipArsenal
 from entities.ship import Ship
 from game_stats import GameStats
+from hud import HUD
 from settings import Settings
 
 
@@ -28,6 +29,7 @@ class AlienInvasion:
             (self.settings.screen_w, self.settings.screen_h))
         pygame.display.set_caption(self.settings.name)
         self.play_button = Button(self, "Play")
+        self.hud = HUD(self)
 
         self.bg = pygame.image.load(self.settings.bg_file)
         self.bg = pygame.transform.scale(
@@ -119,6 +121,7 @@ class AlienInvasion:
         for entity in sorted(self.entities, key=lambda entity: entity.layer):
             entity.draw()
 
+        self.hud.draw()
         if not self.active:
             self.play_button.draw()
             pygame.mouse.set_visible(True)
