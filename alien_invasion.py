@@ -5,6 +5,7 @@ from time import sleep
 
 import pygame
 
+from button import Button
 from entities.alien_fleet import AlienFleet
 from entities.ship_arsenal import ShipArsenal
 from entities.ship import Ship
@@ -26,6 +27,7 @@ class AlienInvasion:
         self.screen = pygame.display.set_mode(
             (self.settings.screen_w, self.settings.screen_h))
         pygame.display.set_caption(self.settings.name)
+        self.play_button = Button(self, "Play")
 
         self.bg = pygame.image.load(self.settings.bg_file)
         self.bg = pygame.transform.scale(
@@ -45,7 +47,7 @@ class AlienInvasion:
         self.impact_sound.set_volume(0.7)
 
         self.running = True
-        self.active = True
+        self.active = False
 
     def run_game(self) -> None:
         """Start the main loop for the game."""
@@ -77,6 +79,15 @@ class AlienInvasion:
             if self.alien_fleet.check_destroyed_status():
                 self._reset_level()
 
+    def _restart_game(self) -> None:
+        """Restore lives and reset the world for a new run."""
+        self.game_stats.ships_left = self.settings.starting_ship_count
+        self.ship.moving_right = False
+        self.ship.moving_left = False
+        self._reset_level()
+        self.active = True
+        pygame.mouse.set_visible(False)
+
     def _reset_level(self) -> None:
         """Clear projectiles, rebuild the fleet, and re-center the ship."""
         self.ship.arsenal.arsenal.empty()
@@ -102,10 +113,14 @@ class AlienInvasion:
         for entity in sorted(self.entities, key=lambda entity: entity.layer):
             entity.draw()
 
+        if not self.active:
+            self.play_button.draw()
+            pygame.mouse.set_visible(True)
+
         pygame.display.flip()
 
     def _check_input(self) -> None:
-        """Respond to keypresses and window events."""
+        """Respond to keyboard, mouse, and window events."""
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 self.running = False
@@ -115,6 +130,14 @@ class AlienInvasion:
                 self._check_keydown_events(event)
             elif event.type == pygame.KEYUP:
                 self._check_keyup_events(event)
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                if event.button == 1:
+                    self._check_button_clicked(event.pos)
+
+    def _check_button_clicked(self, mouse_position) -> None:
+        """Start a new run when the inactive Play button is clicked."""
+        if not self.active and self.play_button.check_clicked(mouse_position):
+            self._restart_game()
 
     def _check_keydown_events(self, event: pygame.event.Event) -> None:
         """Respond to keypresses."""
