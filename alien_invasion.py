@@ -81,10 +81,13 @@ class AlienInvasion:
                 self._reset_level()
 
     def _restart_game(self) -> None:
-        """Restore lives and reset the world for a new run."""
+        """Restore gameplay defaults and reset the world for a new run."""
+        self.settings.initialize_dynamic_settings()
         self.game_stats.ships_left = self.settings.starting_ship_count
         self.ship.moving_right = False
         self.ship.moving_left = False
+        self.alien_fleet.fleet_direction = self.settings.fleet_direction
+        self.alien_fleet.drop_speed = self.settings.fleet_drop_speed
         self._reset_level()
         self.active = True
         pygame.mouse.set_visible(False)
