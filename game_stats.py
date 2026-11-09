@@ -1,4 +1,6 @@
 """Statistics for the current game."""
+import json
+import sys
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
@@ -14,8 +16,8 @@ class GameStats:
         self.settings = game.settings
         self.path = self.settings.scores_file
         self.max_score = 0
-        self.high_score = 0
         self.reset_stats()
+        self._init_saved_scores()
 
     def reset_stats(self) -> None:
         """Restore run statistics without clearing score records."""
@@ -46,3 +48,27 @@ class GameStats:
     def update_level(self) -> None:
         """Advance to the next fleet's level."""
         self.level += 1
+
+    def _init_saved_scores(self) -> None:
+        """Load a valid high score, falling back to zero."""
+        self.high_score = 0
+        try:
+            contents = self.path.read_text(encoding="utf-8")
+            if not contents.strip():
+                return
+            scores = json.loads(contents)
+        except FileNotFoundError:
+            return
+        except (OSError, json.JSONDecodeError, UnicodeDecodeError) as error:
+            print(f"Unable to load high score from {self.path}: {error}",
+                  file=sys.stderr)
+            return
+
+        if not isinstance(scores, dict):
+            print(f"Invalid score record in {self.path}.", file=sys.stderr)
+            return
+        high_score = scores.get("high_score", 0)
+        if type(high_score) is not int or high_score < 0:
+            print(f"Invalid high score in {self.path}.", file=sys.stderr)
+            return
+        self.high_score = high_score
