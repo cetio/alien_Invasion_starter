@@ -16,6 +16,7 @@ class Settings:
         self.sound_dir = Path.cwd() / "Assets" / "sound"
         self.fonts_dir = Path.cwd() / "Assets" / "Fonts"
         self.file_dir = Path.cwd() / "Assets" / "file"
+        self.scores_file = self.file_dir / "scores.json"
 
         self.font_file = self.fonts_dir / "Silkscreen" / "Silkscreen-Bold.ttf"
         self.button_w = 200
@@ -52,6 +53,7 @@ class Settings:
 
         self.alien_w = 40
         self.alien_h = 40
+        self.alien_points = 50
         self.fleet_speed = 2
         self.fleet_drop_speed = 10
 

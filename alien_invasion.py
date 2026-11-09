@@ -22,7 +22,7 @@ class AlienInvasion:
 
         self.clock = pygame.time.Clock()
         self.settings = Settings()
-        self.game_stats = GameStats(self.settings.starting_ship_count)
+        self.game_stats = GameStats(self)
 
         self.screen = pygame.display.set_mode(
             (self.settings.screen_w, self.settings.screen_h))
@@ -83,7 +83,7 @@ class AlienInvasion:
     def _restart_game(self) -> None:
         """Restore gameplay defaults and reset the world for a new run."""
         self.settings.initialize_dynamic_settings()
-        self.game_stats.ships_left = self.settings.starting_ship_count
+        self.game_stats.reset_stats()
         self.ship.moving_right = False
         self.ship.moving_left = False
         self.alien_fleet.fleet_direction = self.settings.fleet_direction
