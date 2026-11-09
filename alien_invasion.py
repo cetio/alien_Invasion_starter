@@ -77,6 +77,7 @@ class AlienInvasion:
         if collisions:
             self.impact_sound.play(fade_ms=250)
             if self.alien_fleet.check_destroyed_status():
+                self.settings.increase_difficulty()
                 self._reset_level()
 
     def _restart_game(self) -> None:
