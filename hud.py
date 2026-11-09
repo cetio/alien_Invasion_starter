@@ -8,10 +8,10 @@ if TYPE_CHECKING:
 
 
 class HUD:
-    """Render cached score images over the game world."""
+    """Render cached statistics and life icons over the game world."""
 
     def __init__(self, game: "AlienInvasion") -> None:
-        """Create the font and prepare the score images."""
+        """Create the font and prepare the statistics and life images."""
         self.game = game
         self.settings = game.settings
         self.screen = game.screen
@@ -22,6 +22,8 @@ class HUD:
         self.font = pygame.font.Font(
             str(self.settings.font_file), self.settings.hud_font_size)
         self.update_scores()
+        self._setup_life_image()
+        self.update_level()
 
     def update_scores(self) -> None:
         """Refresh the score images from the current statistics."""
@@ -56,8 +58,35 @@ class HUD:
         self.high_score_rect.midtop = (
             self.boundaries.centerx, self.padding)
 
+    def _setup_life_image(self) -> None:
+        """Load one reusable ship image for the remaining-life icons."""
+        self.life_image = pygame.image.load(self.settings.ship_file)
+        self.life_image = pygame.transform.scale(
+            self.life_image, (self.settings.ship_w, self.settings.ship_h))
+        self.life_rect = self.life_image.get_rect()
+        self.life_rect.topleft = (self.padding, self.padding)
+
+    def _draw_lives(self) -> None:
+        """Draw a horizontal icon row for the current ship count."""
+        current_x = self.padding
+        current_y = self.padding
+        for _ in range(self.game_stats.ships_left):
+            self.screen.blit(self.life_image, (current_x, current_y))
+            current_x += self.life_rect.width + self.padding
+
+    def update_level(self) -> None:
+        """Render the current level below the life icons."""
+        message = f"Level: {self.game_stats.level}"
+        self.level_image = self.font.render(
+            message, True, self.settings.text_color)
+        self.level_rect = self.level_image.get_rect()
+        self.level_rect.left = self.padding
+        self.level_rect.top = self.life_rect.bottom + self.padding
+
     def draw(self) -> None:
-        """Draw the cached score images."""
+        """Draw the cached statistics and current life icons."""
         self.screen.blit(self.high_score_image, self.high_score_rect)
         self.screen.blit(self.max_score_image, self.max_score_rect)
         self.screen.blit(self.score_image, self.score_rect)
+        self.screen.blit(self.level_image, self.level_rect)
+        self._draw_lives()
