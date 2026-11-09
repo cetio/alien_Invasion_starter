@@ -90,6 +90,8 @@ class AlienInvasion:
         """Restore gameplay defaults and reset the world for a new run."""
         self.settings.initialize_dynamic_settings()
         self.game_stats.reset_stats()
+        self.hud.update_scores()
+        self.hud.update_level()
         self.ship.moving_right = False
         self.ship.moving_left = False
         self.alien_fleet.fleet_direction = self.settings.fleet_direction
