@@ -79,8 +79,10 @@ class AlienInvasion:
         if collisions:
             self.impact_sound.play(fade_ms=250)
             self.game_stats.update(collisions)
+            self.hud.update_scores()
             if self.alien_fleet.check_destroyed_status():
                 self.game_stats.update_level()
+                self.hud.update_level()
                 self.settings.increase_difficulty()
                 self._reset_level()
 
