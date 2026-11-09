@@ -129,9 +129,7 @@ class AlienInvasion:
         """Respond to keyboard, mouse, and window events."""
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                self.running = False
-                pygame.quit()
-                sys.exit()
+                self._quit_game()
             elif event.type == pygame.KEYDOWN:
                 self._check_keydown_events(event)
             elif event.type == pygame.KEYUP:
@@ -139,6 +137,13 @@ class AlienInvasion:
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1:
                     self._check_button_clicked(event.pos)
+
+    def _quit_game(self) -> None:
+        """Save score records and close the game."""
+        self.running = False
+        self.game_stats.save_scores()
+        pygame.quit()
+        sys.exit()
 
     def _check_button_clicked(self, mouse_position) -> None:
         """Start a new run when the inactive Play button is clicked."""
@@ -155,9 +160,7 @@ class AlienInvasion:
             if self.active and self.ship.fire():
                 self.laser_sound.play(fade_ms=250)
         elif event.key == pygame.K_q:
-            self.running = False
-            pygame.quit()
-            sys.exit()
+            self._quit_game()
 
     def _check_keyup_events(self, event: pygame.event.Event) -> None:
         """Respond to key releases."""
