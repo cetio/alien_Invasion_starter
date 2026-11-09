@@ -17,6 +17,14 @@ class Settings:
         self.fonts_dir = Path.cwd() / "Assets" / "Fonts"
         self.file_dir = Path.cwd() / "Assets" / "file"
 
+        self.font_file = self.fonts_dir / "Silkscreen" / "Silkscreen-Bold.ttf"
+        self.button_w = 200
+        self.button_h = 50
+        self.button_color = (0, 128, 0)
+        self.text_color = (255, 255, 255)
+        self.button_font_size = 48
+        self.hud_font_size = 20
+
         self.bg_file = self.images_dir / "Starbasesnow.png"
         self.ship_file = self.images_dir / "ship2(no bg).png"
         self.ship_w = 40
