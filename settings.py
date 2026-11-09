@@ -29,20 +29,34 @@ class Settings:
         self.ship_file = self.images_dir / "ship2(no bg).png"
         self.ship_w = 40
         self.ship_h = 60
-        self.ship_speed = 5
-        self.starting_ship_count = 3
 
         self.bullet_file = self.images_dir / "laserBlast.png"
         self.laser_sound = self.sound_dir / "laser.mp3"
+
+        self.alien_file = self.images_dir / "enemy_4.png"
+        self.impact_sound = self.sound_dir / "impactSound.mp3"
+        self.fleet_direction = 1
+        self.difficulty_scale = 1.1
+
+        self.initialize_dynamic_settings()
+
+    def initialize_dynamic_settings(self) -> None:
+        """Restore the starting gameplay values for a new run."""
+        self.ship_speed = 5
+        self.starting_ship_count = 3
+
         self.bullet_w = 25
         self.bullet_h = 80
         self.bullet_speed = 7
         self.bullet_amount = 5
 
-        self.alien_file = self.images_dir / "enemy_4.png"
-        self.impact_sound = self.sound_dir / "impactSound.mp3"
         self.alien_w = 40
         self.alien_h = 40
         self.fleet_speed = 2
-        self.fleet_direction = 1
         self.fleet_drop_speed = 10
+
+    def increase_difficulty(self) -> None:
+        """Increase movement speeds for the next fleet."""
+        self.ship_speed *= self.difficulty_scale
+        self.bullet_speed *= self.difficulty_scale
+        self.fleet_speed *= self.difficulty_scale
